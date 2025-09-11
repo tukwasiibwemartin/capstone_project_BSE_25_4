@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es2021": true,
@@ -12,6 +13,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "plugins": [
+    "vue"
+  ],
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "off",
