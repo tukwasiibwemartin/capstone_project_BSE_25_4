@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -37,7 +36,7 @@ class Post extends Model implements HasMedia
             ->addMediaConversion('large')
             ->width(1200);
     }
-    
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
@@ -47,7 +46,7 @@ class Post extends Model implements HasMedia
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
@@ -76,7 +75,7 @@ class Post extends Model implements HasMedia
 
         return max(1, $minutes);
     }
-    
+
     public function imageUrl($conversionName = '')
     {
         $media = $this->getFirstMedia();

@@ -46,3 +46,11 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
+
+    - name: PHP Quality Code Check
+      run: |
+        ./vendor/bin/php-cs-fixer fix --dry-run --diff
+
+    - name: JavaScript Linting
+      run: |
+        npx eslint resources/js --ext .js,.vue --ignore-pattern "*.min.js" --max-warnings=0

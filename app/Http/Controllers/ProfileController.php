@@ -28,7 +28,7 @@ class ProfileController extends Controller
     {
         $data = $request->validated();
         // $image = $data['image'] ?? null;
-        
+
         // if ($image) {
         //     $data['image'] = $image->store('avatars', 'public');
         // }
