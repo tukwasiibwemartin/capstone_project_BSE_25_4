@@ -6,9 +6,7 @@ use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -40,7 +38,7 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::get();
-        
+
         return view('post.create', [
             'categories' => $categories,
         ]);
