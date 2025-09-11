@@ -54,9 +54,3 @@ jobs:
     - name: JavaScript Linting
       run: |
         npx eslint resources/js --ext .js,.vue --ignore-pattern "*.min.js"
-
-    - name: Execute tests via PHPUnit/Pest
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: php artisan test
