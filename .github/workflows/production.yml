@@ -1,13 +1,13 @@
-name: Deploy to Staging
+name: Deploy to Production
 
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "main" ]
 
 jobs:
   prepare-database:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
 
     steps:
       - uses: actions/checkout@v4
@@ -33,14 +33,15 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Run migrations on Staging DB
+      - name: Run migrations on Production DB
         env:
           DB_CONNECTION: pgsql
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_URL: ${{ secrets.DB_URL }}
         run: php artisan migrate --force
 
-      - name: Seed the staging database
+      - name: Seed the production database (optional - usually only for first deploy)
+        if: false  # Set to true for initial deployment, then false
         env:
           DB_CONNECTION: pgsql
           DB_PORT: ${{ secrets.DB_PORT }}
@@ -52,8 +53,8 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.prepare-database.result == 'success'
     environment:
-      name: staging
-      url: https://capstonestaging.vercel.app
+      name: production
+      url: https://capstoneproduction.vercel.app
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -76,26 +77,18 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel Preview (Staging)
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
+      - name: Deploy to Vercel Production
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Get Deployment URL
-        id: deployment
-        run: echo "url=$(cat deployment-url.txt)" >> $GITHUB_OUTPUT
-
-      - name: Comment Deployment URL
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: ' Staging deployment ready at: ${{ steps.deployment.outputs.url }}'
-            })
+      - name: Create deployment summary
+        run: |
+          echo "### 🚀 Production Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 URL: https://capstoneproduction.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "📅 Deployed at: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

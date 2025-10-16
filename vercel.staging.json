@@ -47,11 +47,11 @@
     ],
     "outputDirectory": "public",
     "env": {
-        "APP_NAME": "Capstone Production",
-        "APP_ENV": "production",
-        "APP_DEBUG": "false",
-        "APP_URL": "https://capstoneproduction.vercel.app",
-        "ASSET_URL": "https://capstoneproduction.vercel.app",
+        "APP_NAME": "Capstone Staging",
+        "APP_ENV": "staging",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://capstonestaging.vercel.app",
+        "ASSET_URL": "https://capstonestaging.vercel.app",
 
         "LOG_CHANNEL": "stderr",
         "CACHE_DRIVER": "array",
