@@ -1,0 +1,68 @@
+{
+    "version": 2,
+    "framework": null,
+    "buildCommand": "npm run build",
+    "builds": [
+        {
+            "src": "/api/index.php",
+            "use": "vercel-php@latest"
+        },
+        {
+            "src": "/public/build/assets/**",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "/public/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/build/manifest.json",
+            "dest": "/public/build/manifest.json"
+        },
+        {
+            "src": "/build/assets/(.*)",
+            "dest": "/public/build/assets/$1"
+        },
+        {
+            "src": "/favicon.ico",
+            "headers": {
+                "Content-Type": "image/x-icon"
+            },
+            "dest": "/public/favicon.ico"
+        },
+        {
+            "src": "/robots.txt",
+            "dest": "/public/robots.txt"
+        },
+        {
+            "src": "/(.*\\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot))",
+            "dest": "/public/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
+    "outputDirectory": "public",
+    "env": {
+        "APP_NAME": "Capstone Production",
+        "APP_ENV": "production",
+        "APP_DEBUG": "false",
+        "APP_URL": "https://capstoneproduction.vercel.app",
+        "ASSET_URL": "https://capstoneproduction.vercel.app",
+
+        "LOG_CHANNEL": "stderr",
+        "CACHE_DRIVER": "array",
+        "SESSION_DRIVER": "cookie",
+
+        "APP_CONFIG_CACHE": "/tmp/config.php",
+        "APP_EVENTS_CACHE": "/tmp/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/packages.php",
+        "APP_ROUTES_CACHE": "/tmp/routes.php",
+        "APP_SERVICES_CACHE": "/tmp/services.php",
+        "VIEW_COMPILED_PATH": "/tmp/views",
+        "APP_STORAGE_PATH": "/tmp"
+    }
+}
