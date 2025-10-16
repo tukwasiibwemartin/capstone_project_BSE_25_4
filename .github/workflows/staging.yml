@@ -78,9 +78,14 @@ jobs:
       - name: Deploy to Vercel Preview (Staging)
         run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes > deployment-url.txt
 
+      - name: Alias deployment to staging domain
+        run: |
+          DEPLOYMENT_URL=$(cat deployment-url.txt)
+          vercel alias set $DEPLOYMENT_URL capstonestaging.vercel.app --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+
       - name: Get Deployment URL
         id: deployment
-        run: echo "url=$(cat deployment-url.txt)" >> $GITHUB_OUTPUT
+        run: echo "url=https://capstonestaging.vercel.app" >> $GITHUB_OUTPUT
 
       - name: Comment Deployment URL
         if: github.event_name == 'pull_request'
