@@ -77,18 +77,12 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Deploy to Vercel Production
-        run: |
-          vercel deploy \
-            --prod \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --env DB_URL=${{ secrets.DB_URL }} \
-            --env DB_PORT=${{ secrets.DB_PORT }} \
-            --yes
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
 
       - name: Create deployment summary
         run: |
-          echo "### 🚀 Production Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "### Production Deployment Successful" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 URL: https://capstoneproduction.vercel.app" >> $GITHUB_STEP_SUMMARY
-          echo "📅 Deployed at: $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "📦 Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "URL: https://capstoneproduction.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "Deployed at: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
