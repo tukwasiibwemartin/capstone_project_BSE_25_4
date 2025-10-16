@@ -40,8 +40,7 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
         run: php artisan migrate --force
 
-      - name: Seed the production database (optional - usually only for first deploy)
-        if: false  # Set to true for initial deployment, then false
+      - name: Seed the production database
         env:
           DB_CONNECTION: pgsql
           DB_PORT: ${{ secrets.DB_PORT }}
