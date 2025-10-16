@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for rollback
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -50,13 +50,13 @@ jobs:
 
       - name: Notify rollback
         run: |
-          echo "### ⚠️ Production Rollback Executed" >> $GITHUB_STEP_SUMMARY
+          echo "### Production Rollback Executed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 Environment: Production" >> $GITHUB_STEP_SUMMARY
-          echo "📅 Rolled back at: $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "👤 Triggered by: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "Environment: Production" >> $GITHUB_STEP_SUMMARY
+          echo "Rolled back at: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           if [ -n "${{ inputs.deployment_url }}" ]; then
-            echo "🔗 Rollback URL: ${{ inputs.deployment_url }}" >> $GITHUB_STEP_SUMMARY
+            echo "Rollback URL: ${{ inputs.deployment_url }}" >> $GITHUB_STEP_SUMMARY
           else
-            echo "📦 Reverted commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+            echo "Reverted commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           fi
