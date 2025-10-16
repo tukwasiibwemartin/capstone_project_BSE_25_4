@@ -76,12 +76,7 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Deploy to Vercel Preview (Staging)
-        run: |
-          vercel deploy \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --env DB_URL=${{ secrets.DB_URL }} \
-            --env DB_PORT=${{ secrets.DB_PORT }} \
-            --yes > deployment-url.txt
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes > deployment-url.txt
 
       - name: Get Deployment URL
         id: deployment
