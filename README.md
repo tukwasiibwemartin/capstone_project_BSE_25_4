@@ -55,7 +55,7 @@ php artisan key:generate
 
 8. Run the command below to run the database migrations
 ```
-php artisan migrate
+php artisan migrate --seed
 ```
 
 9. Run the command below to start the php server
