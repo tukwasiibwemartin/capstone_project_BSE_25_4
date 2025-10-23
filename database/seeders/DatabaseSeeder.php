@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        
         $categories = [
             'Technology',
             'Health',
