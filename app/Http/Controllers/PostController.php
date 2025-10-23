@@ -63,6 +63,13 @@ class PostController extends Controller
         $post->addMediaFromRequest('image')
             ->toMediaCollection();
 
+        // Log post creation (appears in Telescope)
+        \Log::info('Post created', [
+            'post_id' => $post->id,
+            'title' => $post->title,
+            'user_id' => Auth::id(),
+        ]);
+
         return redirect()->route('dashboard');
     }
 
@@ -120,6 +127,13 @@ class PostController extends Controller
             abort(403);
         }
         $post->delete();
+
+        // Log post deletion (appears in Telescope)
+        \Log::info('Post deleted', [
+            'post_id' => $post->id,
+            'title' => $post->title,
+            'user_id' => Auth::id(),
+        ]);
 
         return redirect()->route('dashboard');
     }
