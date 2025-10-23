@@ -1,0 +1,62 @@
+name: Rollback Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_url:
+        description: 'Previous deployment URL to rollback to (leave empty to rollback to previous commit)'
+        required: false
+        type: string
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://capstoneproduction.vercel.app
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Rollback using Vercel URL
+        if: inputs.deployment_url != ''
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "Rolling back to deployment: ${{ inputs.deployment_url }}"
+          vercel rollback ${{ inputs.deployment_url }} --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Rollback to previous commit
+        if: inputs.deployment_url == ''
+        run: |
+          echo "No deployment URL provided, rolling back via git revert"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git revert --no-commit HEAD
+          git commit -m "Rollback: Revert to previous stable version"
+          git push origin main
+
+      - name: Notify rollback
+        run: |
+          echo "### Production Rollback Executed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Environment: Production" >> $GITHUB_STEP_SUMMARY
+          echo "Rolled back at: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ inputs.deployment_url }}" ]; then
+            echo "Rollback URL: ${{ inputs.deployment_url }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Reverted commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          fi
