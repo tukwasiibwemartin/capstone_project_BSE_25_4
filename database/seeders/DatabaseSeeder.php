@@ -14,13 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Test User',
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'], // Search by email
+            [
+                'name' => 'Test User',
+                'username' => 'testuser',
+                'password' => bcrypt('password'),
+            ]
+        );
 
-
+        
         $categories = [
             'Technology',
             'Health',
