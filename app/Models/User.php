@@ -11,12 +11,13 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements MustVerifyEmail, HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
-    use Notifiable;
+
     use InteractsWithMedia;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +56,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         ];
     }
 
-
     public function registerMediaConversions(?Media $media = null): void
     {
         $this
@@ -88,20 +88,22 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function imageUrl()
     {
         $media = $this->getFirstMedia('avatar');
-        if (!$media) {
+        if (! $media) {
             return null;
         }
         if ($media->hasGeneratedConversion('avatar')) {
             return $media->getUrl('avatar');
         }
+
         return $media->getUrl();
     }
 
     public function isFollowedBy(?User $user)
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
+
         return $this->followers()->where('follower_id', $user->id)->exists();
     }
 

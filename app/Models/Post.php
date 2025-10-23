@@ -13,8 +13,8 @@ use Spatie\Sluggable\SlugOptions;
 class Post extends Model implements HasMedia
 {
     use HasFactory;
-    use InteractsWithMedia;
     use HasSlug;
+    use InteractsWithMedia;
 
     protected $fillable = [
         // 'image',
@@ -79,12 +79,13 @@ class Post extends Model implements HasMedia
     public function imageUrl($conversionName = '')
     {
         $media = $this->getFirstMedia();
-        if (!$media) {
+        if (! $media) {
             return null;
         }
         if ($media->hasGeneratedConversion($conversionName)) {
             return $media->getUrl($conversionName);
         }
+
         return $media->getUrl();
     }
 }
