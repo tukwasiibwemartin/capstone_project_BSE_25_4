@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         $user = auth()->user();
 
-        $query =  Post::with(['user', 'media'])
+        $query = Post::with(['user', 'media'])
             ->where('published_at', '<=', now())
             ->withCount('claps')
             ->latest();
@@ -27,6 +27,7 @@ class PostController extends Controller
         }
 
         $posts = $query->simplePaginate(5);
+
         return view('post.index', [
             'posts' => $posts,
         ]);
@@ -92,6 +93,7 @@ class PostController extends Controller
             abort(403);
         }
         $categories = Category::get();
+
         return view('post.edit', [
             'post' => $post,
             'categories' => $categories,
