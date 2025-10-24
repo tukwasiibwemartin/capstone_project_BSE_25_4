@@ -49,7 +49,7 @@
     "env": {
         "APP_NAME": "Capstone Production",
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
         "APP_URL": "https://capstoneproduction.vercel.app",
         "ASSET_URL": "https://capstoneproduction.vercel.app",
 
