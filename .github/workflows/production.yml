@@ -78,6 +78,20 @@ jobs:
       - name: Deploy to Vercel Production
         run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
 
+      - name: Start Nightwatch Agent on Production
+        env:
+          NIGHTWATCH_TOKEN: ${{ secrets.NIGHTWATCH_TOKEN }}
+          DB_CONNECTION: pgsql
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_URL: ${{ secrets.DB_URL }}
+        run: |
+          if [ -n "$NIGHTWATCH_TOKEN" ]; then
+            echo "Starting Nightwatch monitoring agent..."
+            php artisan nightwatch:agent --once || echo "Nightwatch agent execution completed"
+          else
+            echo "Nightwatch token not configured, skipping monitoring setup"
+          fi
+
       - name: Create deployment summary
         run: |
           echo "### Production Deployment Successful" >> $GITHUB_STEP_SUMMARY
